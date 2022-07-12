@@ -351,7 +351,7 @@ void setup() {
   // allows the "autoConnect" method to be non-blocking which can implement this same functionality.  However,
   // that change is only on the development branch so we are going to continue to use this fork until
   // that is merged and ready.
-  wifiManager.setSetupLoopCallback(handleLED);
+  //wifiManager.setSetupLoopCallback(handleLED);
 
   // Allows us to have static IP config in the captive portal. Yucky pointers to pointers, just to have the settings carry through
   wifiManager.setSaveConfigCallback(wifiExtraSettingsChange);
@@ -397,7 +397,7 @@ void setup() {
   if (wifiManager.autoConnect(ssid.c_str(), "milightHub")) {
     // set LED mode for successful operation
     ledStatus->continuous(settings.ledModeOperating);
-    Serial.println(F("Wifi connected succesfully\n"));
+     Serial.println(F("Wifi connected succesfully\n"));
 
     // if the config portal was started, make sure to turn off the config AP
     WiFi.mode(WIFI_STA);

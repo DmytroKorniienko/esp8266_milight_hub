@@ -177,11 +177,14 @@ void MiLightClient::updateStatus(MiLightStatus status, uint8_t groupId) {
 }
 
 void MiLightClient::updateStatus(MiLightStatus status) {
+  const GroupState* state = this->currentState;
+  if ((state && state->getState() != status) || state->getBulbMode()==BulbMode::BULB_MODE_NIGHT) {
 #ifdef DEBUG_CLIENT_COMMANDS
-  Serial.printf_P(PSTR("MiLightClient::updateStatus: Status %s\n"), status == MiLightStatus::OFF ? "OFF" : "ON");
+    Serial.printf_P(PSTR("MiLightClient::updateStatus: Status %s\n"), status == MiLightStatus::OFF ? "OFF" : "ON");
 #endif
-  currentRemote->packetFormatter->updateStatus(status);
-  flushPacket();
+    currentRemote->packetFormatter->updateStatus(status);
+    flushPacket();
+  }
 }
 
 void MiLightClient::updateSaturation(const uint8_t value) {
@@ -357,6 +360,7 @@ void MiLightClient::update(JsonObject request) {
 
   for (const char* fieldName : FIELD_ORDERINGS) {
     if (request.containsKey(fieldName)) {
+      //Serial.printf_P(PSTR("update::%s:%s\n"), fieldName, request[fieldName].as<String>().c_str());
       auto handler = FIELD_SETTERS.find(fieldName);
       JsonVariant value = request[fieldName];
 
